@@ -1,0 +1,124 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<style>
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 30px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        background: black;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .filters {
+        margin: 0 30px 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    input, button {
+        padding: 8px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin: 30px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .low {
+        background: #fee2e2;
+    }
+</style>
+
+<div class="top-bar">
+    <h2>Reports</h2>
+    <a href="{% url 'download_report_pdf' %}" class="btn">Download PDF</a>
+</div>
+
+<form method="get" class="filters">
+    <input type="text" name="name" placeholder="Search material" value="{{ name_query }}">
+    <label>
+        <input type="checkbox" name="low_stock" {% if low_stock_only %}checked{% endif %}>
+        Low stock only
+    </label>
+    <button type="submit">Apply</button>
+</form>
+
+<div class="grid">
+
+    <div class="card">
+        <h3>Summary</h3>
+        <p>Total Materials: <strong>{{ total_materials }}</strong></p>
+        <p>Total Quantity: <strong>{{ total_quantity }}</strong></p>
+    </div>
+
+    <div class="card">
+        <h3>Inventory Chart</h3>
+        <canvas id="inventoryChart"></canvas>
+    </div>
+
+</div>
+
+<div class="card" style="margin:30px;">
+    <h3>Materials</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Qty</th>
+            <th>Min</th>
+        </tr>
+        {% for m in materials %}
+        <tr class="{% if m.quantity <= m.min_quantity %}low{% endif %}">
+            <td>{{ m.name }}</td>
+            <td>{{ m.quantity }}</td>
+            <td>{{ m.min_quantity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('inventoryChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for m in materials %}'{{ m.name }}',{% endfor %}],
+        datasets: [{
+            label: 'Quantity',
+            data: [{% for m in materials %}{{ m.quantity }},{% endfor %}],
+        }]
+    }
+});
+</script>
+
+{% endblock %}

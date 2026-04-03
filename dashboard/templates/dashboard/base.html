@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Factory ERP</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            position: fixed;
+            padding: 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+        }
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Factory ERP</h2>
+    <a href="/">Dashboard</a>
+    <a href="/inventory/">Inventory</a>
+    <a href="/reports/">Reports</a>
+    <a href="/logout/">Logout</a>
+</div>
+
+<div class="main">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends "inventory/base.html" %}
+{% block content %}
+
+<h2 style="text-align:center;">Inventory</h2>
+
+<div style="text-align:right; margin-bottom:15px;">
+    <a href="{% url 'add_material' %}">
+        <button>Add Material</button>
+    </a>
+</div>
+
+<table border="1" cellpadding="10" cellspacing="0" style="margin:auto;">
+    <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Low Stock</th>
+        <th>Action</th>
+    </tr>
+
+    {% for material in materials %}
+    <tr {% if material.quantity <= material.min_quantity %} style="background:#ffd6d6;" {% endif %}>
+        <td>{{ material.name }}</td>
+        <td>{{ material.quantity }}</td>
+        <td>{{ material.min_quantity }}</td>
+        <td>
+            <a href="{% url 'edit_material' material.id %}">Edit</a> |
+            <a href="{% url 'delete_material' material.id %}"
+               onclick="return confirm('Are you sure you want to delete {{ material.name }}?');">
+               Delete
+            </a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4" style="text-align:center;">No materials found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

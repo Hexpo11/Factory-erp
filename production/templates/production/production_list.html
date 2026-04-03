@@ -1,0 +1,23 @@
+<h2>Production Orders</h2>
+
+<a href="{% url 'add_order' %}">+ New Order</a>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Status</th>
+        <th>Update</th>
+    </tr>
+
+    {% for o in orders %}
+    <tr>
+        <td>{{ o.product_name }}</td>
+        <td>{{ o.quantity }}</td>
+        <td>{{ o.status }}</td>
+        <td>
+            <a href="{% url 'update_status' o.id %}">Change Status</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

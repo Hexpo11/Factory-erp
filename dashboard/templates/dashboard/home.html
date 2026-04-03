@@ -1,0 +1,30 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2>Dashboard</h2>
+
+    <div class="card mt-3 p-3">
+        <h5>Total Materials</h5>
+        <h3>{{ total_materials }}</h3>
+    </div>
+
+    {% if low_stock_count > 0 %}
+    <div class="alert alert-danger mt-4">
+        <strong>⚠ Low Stock Alert</strong><br>
+        {{ low_stock_count }} item(s) below minimum stock.
+        <ul class="mt-2">
+            {% for item in low_stock_items %}
+                <li>{{ item.name }} — {{ item.quantity }} left (min {{ item.min_quantity }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <div class="alert alert-success mt-4">
+        All materials are sufficiently stocked.
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

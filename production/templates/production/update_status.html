@@ -1,0 +1,11 @@
+<h2>Update Status: {{ order.product_name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <select name="status">
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select>
+    <button type="submit">Update</button>
+</form>
